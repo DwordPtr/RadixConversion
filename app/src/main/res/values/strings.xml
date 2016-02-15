@@ -7,6 +7,11 @@
     <string name="goesHere">...result here...</string>
     <string name="convert">Convert</string>
     <string name="invalidInput">Invalid Input, Illegal Symbols or (Under|Over)flow</string>
+    <string name="convertToEqualsConvertFrom">Not really converting anything but ok.</string>
+
+    <string name="spinnerChange">Spinner Change</string>
+    <string name="converFromSpinnerChange">Switched convert From to </string>
+    <string name="convertToSpinnerChange">Switched convertTo to </string>
 
     <string name="mainActivityDescription">This main activity will convert between bases 2,10,16
     for 32bit integers in java. I\'ll likely add this for bytes in another activity.</string>

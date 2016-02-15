@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,Spinner.OnItemSelectedListener{
     @Override
     public void onClick(View v) {
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     inputConvert = Integer.parseInt(numberCandidate.toLowerCase(),16);
             }
             catch(Exception e){
-                Toast.makeText(this,getString(R.string.invalidInput),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,R.string.invalidInput,Toast.LENGTH_SHORT).show();
                 Log.e("Convert Issues","derp",e);
                 return;
             }
@@ -55,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Spinner convertFromSpinner = (Spinner)findViewById(R.id.convertFrom_spinner);
             //convertFromSpinner.setSelection(position);
             convertFrom = radixTable[position];
-            Toast.makeText(this,"Switched convert from to "+convertFrom.name(),Toast.LENGTH_SHORT).show();
+            Log.i(getString(R.string.spinnerChange),
+                    getString(R.string.converFromSpinnerChange)+convertFrom.name());
 
 
         }
@@ -64,23 +64,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Spinner convertToSpinner = (Spinner)findViewById(R.id.convertTo_spinner);
             //convertToSpinner.setSelection(position);
             convertTo = radixTable[position];
-            Toast.makeText(this,"Switched convert from to "+convertTo.name(),Toast.LENGTH_SHORT).show();
+            Log.i(getString(R.string.spinnerChange),
+                    getString(R.string.convertToSpinnerChange)+convertTo.name());
         }
         TextView resultEt = (TextView)findViewById(R.id.converted_textView);
         resultEt.setText(R.string.goesHere);
+        if(convertFrom.equals(convertTo))
+            Toast.makeText(this,R.string.convertToEqualsConvertFrom,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        return;
     }
 
     public enum RadixType{
-        Hex ,Bin,Dec;
-
+        Hex ,Bin,Dec
     }
     private RadixType convertFrom =  RadixType.Dec;
-    private RadixType convertTo = RadixType.Dec;
+    private RadixType convertTo = RadixType.Bin;
     private RadixType[] radixTable = {RadixType.Bin,RadixType.Dec,RadixType.Hex};
 
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         convertFromSpinner.setAdapter(convertSpinnerAdapter);
         convertToSpinner.setAdapter(convertSpinnerAdapter);
         convertFromSpinner.setSelection(1);
-        convertToSpinner.setSelection(1);
+        convertToSpinner.setSelection(0);
 
         convertToSpinner.setOnItemSelectedListener(this);
         convertFromSpinner.setOnItemSelectedListener(this);
