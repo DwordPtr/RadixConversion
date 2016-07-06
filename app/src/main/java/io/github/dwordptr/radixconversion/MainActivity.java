@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,33 +16,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,Spinner.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener {
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.convert_button){
-            EditText numberFieldET = (EditText)findViewById(R.id.convertNum_editText);
-            TextView convertedTextView = (TextView)findViewById(R.id.converted_textView);
+        if (v.getId() == R.id.convert_button) {
+            EditText numberFieldET = (EditText) findViewById(R.id.convertNum_editText);
+            TextView convertedTextView = (TextView) findViewById(R.id.converted_textView);
             String numberCandidate = numberFieldET.getText().toString().trim();
             int inputConvert = 0;
-            try{
-                if(convertFrom == RadixType.Dec)
+            try {
+                if (convertFrom == RadixType.Dec)
                     inputConvert = Integer.parseInt(numberCandidate);
-                else if(convertFrom == RadixType.Bin)
+                else if (convertFrom == RadixType.Bin)
                     inputConvert = Integer.parseInt(numberCandidate, 2);
-                else if(convertFrom == RadixType.Hex)
-                    inputConvert = Integer.parseInt(numberCandidate.toLowerCase(),16);
-            }
-            catch(Exception e){
-                Toast.makeText(this,R.string.invalidInput,Toast.LENGTH_SHORT).show();
-                Log.e("Convert Issues","derp",e);
+                else if (convertFrom == RadixType.Hex)
+                    inputConvert = Integer.parseInt(numberCandidate.toLowerCase(), 16);
+            } catch (Exception e) {
+                Toast.makeText(this, R.string.invalidInput, Toast.LENGTH_SHORT).show();
+                Log.e("Convert Issues", "derp", e);
                 return;
             }
-            if(convertTo==RadixType.Dec)
+            if (convertTo == RadixType.Dec)
                 convertedTextView.setText(Integer.toString(inputConvert));
-            else if(convertTo==RadixType.Bin)
+            else if (convertTo == RadixType.Bin)
                 convertedTextView.setText(Integer.toBinaryString(inputConvert));
-            else if(convertTo == RadixType.Hex)
+            else if (convertTo == RadixType.Hex)
                 convertedTextView.setText(Integer.toHexString(inputConvert));
         }
 
@@ -50,49 +48,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getId() == R.id.convertFrom_spinner){
-            Spinner convertFromSpinner = (Spinner)findViewById(R.id.convertFrom_spinner);
+        if (parent.getId() == R.id.convertFrom_spinner) {
+            Spinner convertFromSpinner = (Spinner) findViewById(R.id.convertFrom_spinner);
             //convertFromSpinner.setSelection(position);
             convertFrom = radixTable[position];
             Log.i(getString(R.string.spinnerChange),
-                    getString(R.string.converFromSpinnerChange)+convertFrom.name());
+                    getString(R.string.converFromSpinnerChange) + convertFrom.name());
 
 
-        }
-        else if(parent.getId() == R.id.convertTo_spinner)
-        {
-            Spinner convertToSpinner = (Spinner)findViewById(R.id.convertTo_spinner);
+        } else if (parent.getId() == R.id.convertTo_spinner) {
+            Spinner convertToSpinner = (Spinner) findViewById(R.id.convertTo_spinner);
             //convertToSpinner.setSelection(position);
             convertTo = radixTable[position];
             Log.i(getString(R.string.spinnerChange),
-                    getString(R.string.convertToSpinnerChange)+convertTo.name());
+                    getString(R.string.convertToSpinnerChange) + convertTo.name());
         }
-        TextView resultEt = (TextView)findViewById(R.id.converted_textView);
+        TextView resultEt = (TextView) findViewById(R.id.converted_textView);
         resultEt.setText(R.string.goesHere);
-        if(convertFrom.equals(convertTo))
-            Toast.makeText(this,R.string.convertToEqualsConvertFrom,Toast.LENGTH_SHORT).show();
+        if (convertFrom.equals(convertTo))
+            Toast.makeText(this, R.string.convertToEqualsConvertFrom, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
-    public enum RadixType{
-        Hex ,Bin,Dec
+    public enum RadixType {
+        Hex,
+        Bin,
+        Dec
     }
-    private RadixType convertFrom =  RadixType.Dec;
+
+    private RadixType convertFrom = RadixType.Dec;
     private RadixType convertTo = RadixType.Bin;
-    private RadixType[] radixTable = {RadixType.Bin,RadixType.Dec,RadixType.Hex};
+    private RadixType[] radixTable = { RadixType.Bin, RadixType.Dec, RadixType.Hex };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
-        Spinner convertFromSpinner = (Spinner)findViewById(R.id.convertFrom_spinner);
-        Spinner convertToSpinner = (Spinner)findViewById(R.id.convertTo_spinner);
+        Spinner convertFromSpinner = (Spinner) findViewById(R.id.convertFrom_spinner);
+        Spinner convertToSpinner = (Spinner) findViewById(R.id.convertTo_spinner);
+        Spinner modeSpinner = (Spinner) findViewById(R.id.mode_spinner);
         ArrayAdapter<CharSequence> convertSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.radix_choices,android.R.layout.simple_spinner_item);
+                R.array.radix_choices, android.R.layout.simple_spinner_item);
+
+        ArrayAdapter<CharSequence> modeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.mode_types, android.R.layout.simple_spinner_item);
+
+        modeSpinner.setAdapter(modeSpinnerAdapter);
 
         convertFromSpinner.setAdapter(convertSpinnerAdapter);
         convertToSpinner.setAdapter(convertSpinnerAdapter);
@@ -102,11 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         convertToSpinner.setOnItemSelectedListener(this);
         convertFromSpinner.setOnItemSelectedListener(this);
 
-        Button convertButton = (Button)findViewById(R.id.convert_button);
+        Button convertButton = (Button) findViewById(R.id.convert_button);
         convertButton.setOnClickListener(this);
 
         //textwatcher
-        EditText inputEt = (EditText)findViewById(R.id.convertNum_editText);
+        EditText inputEt = (EditText) findViewById(R.id.convertNum_editText);
         inputEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView results = (TextView)findViewById(R.id.converted_textView);
+                TextView results = (TextView) findViewById(R.id.converted_textView);
                 results.setText(R.string.goesHere);
 
             }
